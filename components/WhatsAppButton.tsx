@@ -2,8 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
-
-
+import { useState } from 'react'
 
 const WhatsAppIcon = () => (
   <svg
@@ -19,6 +18,7 @@ const WhatsAppIcon = () => (
 export default function WhatsAppButton() {
   const pathname = usePathname()
   const { items: cartItems } = useCart()
+  const [showConfirmation, setShowConfirmation] = useState(false)
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
 
   // Don't show on auth pages or modals
@@ -75,19 +75,58 @@ export default function WhatsAppButton() {
   }
 
   const handleClick = () => {
+    setShowConfirmation(true)
+  }
+
+  const handleConfirm = () => {
     const phoneNumber = '923170294505' // Your WhatsApp number
     const message = encodeURIComponent(getMessage())
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
     window.open(whatsappUrl, '_blank')
+    setShowConfirmation(false)
+  }
+
+  const handleCancel = () => {
+    setShowConfirmation(false)
   }
 
   return (
-    <button
-      onClick={handleClick}
-      className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
-      aria-label="Chat on WhatsApp"
-    >
-      <WhatsAppIcon />
-    </button>
+    <>
+      <button
+        onClick={handleClick}
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2"
+        aria-label="Chat on WhatsApp"
+      >
+        <WhatsAppIcon />
+      </button>
+
+      {/* Confirmation Modal */}
+      {showConfirmation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-xl font-semibold mb-4">Confirm WhatsApp Message</h3>
+            <div className="bg-gray-50 p-4 rounded-lg mb-4 max-h-60 overflow-y-auto">
+              <pre className="whitespace-pre-wrap text-sm text-gray-700">
+                {getMessage()}
+              </pre>
+            </div>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleCancel}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="px-4 py-2 bg-[#25D366] text-white rounded hover:bg-[#128C7E] transition-colors"
+              >
+                Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 } 

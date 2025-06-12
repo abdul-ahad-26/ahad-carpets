@@ -7,17 +7,22 @@ import { Button } from '@/components/ui/button'
 import { useWishlist } from '@/context/WishlistContext'
 import { toast } from 'sonner'
 import { Heart, ArrowLeft, Trash2 } from 'lucide-react'
+import { useState } from 'react'
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 
 export default function WishlistPage() {
   const { items, removeItem } = useWishlist()
- 
-
-
+  const [selectedProduct, setSelectedProduct] = useState<{ id: string; name: string } | null>(null)
 
   const handleRemoveFromWishlist = (productId: string, productName: string) => {
-    if (window.confirm(`Do you want to remove "${productName}" from your wishlist?`)) {
-      removeItem(productId)
+    setSelectedProduct({ id: productId, name: productName })
+  }
+
+  const confirmRemove = () => {
+    if (selectedProduct) {
+      removeItem(selectedProduct.id)
       toast.success('Removed from wishlist')
+      setSelectedProduct(null)
     }
   }
 
@@ -123,6 +128,16 @@ export default function WishlistPage() {
           )
         })}
       </div>
+
+      <ConfirmationDialog
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onConfirm={confirmRemove}
+        title="Remove from Wishlist"
+        description={`Are you sure you want to remove "${selectedProduct?.name}" from your wishlist?`}
+        confirmText="Yes, remove"
+        cancelText="Cancel"
+      />
     </div>
   )
 }

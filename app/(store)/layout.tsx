@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { ClerkProvider } from "@clerk/nextjs"
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -8,7 +7,6 @@ import { SanityLive } from "@/sanity/lib/live";
 import { VisualEditing } from "next-sanity"
 import { draftMode } from "next/headers"
 import DisableDraftMode from "@/components/DisableDraftMode";
-
 
 export const metadata: Metadata = {
   title: "Ahad Carpets - Premium Handcrafted Carpets",
@@ -59,26 +57,24 @@ export default async function StoreLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider dynamic>
-      <html lang="en">
-        <body>
-          {(await draftMode()).isEnabled && (
-            <>
+    <html lang="en">
+      <body>
+        {(await draftMode()).isEnabled && (
+          <>
             <DisableDraftMode/>
             <VisualEditing/>
-            </>
-          )}
-          <main className="min-h-screen flex flex-col">
-            <Header />
-            <div className="flex-grow">
-              {children}
-            </div>
-            <Footer />
-            <WhatsAppButton />
-          </main>
-          <SanityLive />
-        </body>
-      </html>
-    </ClerkProvider>
+          </>
+        )}
+        <main className="min-h-screen flex flex-col">
+          <Header />
+          <div className="flex-grow">
+            {children}
+          </div>
+          <Footer />
+          <WhatsAppButton />
+        </main>
+        <SanityLive />
+      </body>
+    </html>
   );
 }

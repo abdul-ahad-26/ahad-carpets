@@ -1,8 +1,9 @@
 'use client'
 import { Product } from '@/sanity.types'
 import React from 'react'
-import ProductThumb from './ProductThumb';
+
 import {AnimatePresence, motion} from "framer-motion"
+import ProductCard from './ProductCard'
 
 const ProductGrid = ({ products }: { products: Product[] }) => {
     return (
@@ -19,7 +20,7 @@ const ProductGrid = ({ products }: { products: Product[] }) => {
                             className = "flex justify-center"
                             >
 
-                            < ProductThumb key = { product._id } product = { product } />
+                            < ProductCard key = { product._id } product = { product } />
                             </motion.div>
 
                         </AnimatePresence>

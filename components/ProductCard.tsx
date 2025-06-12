@@ -2,9 +2,9 @@ import { Product } from '@/sanity.types';
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
 import Link from 'next/link';
-import WishlistButton from './WishlistButton';
 
-const ProductThumb = ({ product }: { product: Product }) => {
+
+const ProductCard = ({ product }: { product: Product }) => {
   const isOutOfStock = product.stock === 0;
   const productUrl = `/product/${product.slug?.current}`;
   const productImageUrl = product.image ? urlFor(product.image).url() : '';
@@ -82,7 +82,7 @@ const ProductThumb = ({ product }: { product: Product }) => {
                 </span>
               )}
             </div>
-            <WishlistButton product={product} size="lg" />
+            
           </div>
         </div>
       </div>
@@ -90,4 +90,4 @@ const ProductThumb = ({ product }: { product: Product }) => {
   );
 };
 
-export default ProductThumb;
+export default ProductCard;

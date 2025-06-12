@@ -42,7 +42,7 @@ const CategorySelectorComponent = ({ categories }: CategorySelectorProps) => {
                 <Button variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className='w-full max-w-full relative flex justify-between  sm:flex-none items-center space-x-2  font-bold py-2 px-4 bg-[#1a3fa6] text-white rounded hover:bg-[#2563eb]'>
+                    className='w-full max-w-full relative flex justify-between  sm:flex-none items-center space-x-2  font-bold py-2 px-4 bg-[#1a3fa6] text-white rounded-full hover:bg-[#2563eb]'>
                     {/* Display selected category or default text */}
                     <div>{value ? categories.find((category) => category._id === value)?.title : "Filter by category "}</div>
                     <FiChevronDown className="ml-2 h-4 w-4 shrink-0 " />

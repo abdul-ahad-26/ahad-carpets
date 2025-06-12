@@ -25,6 +25,7 @@ export const productType = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            
             name: "image",
             title: "Product Image",
             type: "image",
@@ -44,6 +45,12 @@ export const productType = defineType({
             validation: (Rule) => Rule.required().min(0),
         }),
         defineField({
+            name: "discount",
+            title: "Discount Percentage",
+            type: "number",
+            validation: (Rule) => Rule.min(0).max(100),
+        }),
+        defineField({
             name: "category",
             title: "Categories",
             type: "array",
@@ -53,7 +60,7 @@ export const productType = defineType({
             name: "stock",
             title: "Stock",
             type: "number",
-            validation: (Rule) => Rule.min(0),
+            validation: (Rule) => Rule.required().min(0),
         }),
     ],
     preview: {

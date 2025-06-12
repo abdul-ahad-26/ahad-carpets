@@ -1,0 +1,109 @@
+- cart and wishlist will be stored at backend against the specific user
+
+add to wishlist (requires login)
+	- can item to wishlist 
+	- disable add to cart button when out of stock
+	- flag when item is removed 
+
+add to cart (requires login)
+	- can add items not more than the stock
+	- on checkout re-check stock availability
+	- after order is placed reduce the stock and clear the cart 
+	
+		on cart page :
+			- not reduced quantity less than 1
+			- not increase more than available
+			- ensure before deleting cart item
+			- feature for selecting and can either select selected items for checkout or for deletion
+
+
+
+✅ Authentication Requirement
+Users must be logged in to add to cart or wishlist.
+
+Use Clerk to authenticate users and get their unique ID for cart/wishlist storage.
+
+📦 Cart Flow
+Add to Cart Button
+
+Show “+”, “–”, “Add to Cart”, and “Buy Now” buttons on the product page.
+
+Quantity buttons respect current stock (cannot go above).
+
+Disable "Add to Cart" if stock is 0.
+
+Store in Sanity
+
+Each user has one cart document in Sanity with product references and quantities.
+
+Cart is synced on add, update, or remove.
+
+Cart Page
+
+Users can:
+
+Increase/decrease quantity (within stock range).
+
+Remove item (with confirmation).
+
+Select items to delete or proceed to checkout.
+
+Quantities cannot go below 1 or above current stock.
+
+Checkout Flow
+
+Before creating a Stripe session:
+
+Re-check product stock on server.
+
+If insufficient stock, abort checkout.
+
+On successful payment:
+
+Deduct stock in Sanity.
+
+Clear user’s cart.
+
+💖 Wishlist Flow
+Add to Wishlist
+
+Requires login.
+
+Stored in Sanity as a wishlist document with product references.
+
+If product already exists, it can be removed (toggle behavior).
+
+Flag/animation shown when item is added or removed.
+
+Wishlist Page
+
+Shows all wishlist items.
+
+Each has a button to add to cart (disabled if out of stock).
+
+Removing item updates Sanity and local state.
+
+🔐 Backend Safety Measures
+Use Sanity patch transactions to avoid race conditions.
+
+Final stock check is only done on the server, just before checkout.
+
+All sensitive operations (checkout, stock update) handled via API routes or webhooks.
+
+🔄 Sync Strategy
+Cart and wishlist are fetched on login and stored in local context state.
+
+On any change (add/remove/update), both local state and Sanity are updated.
+
+Local state gives instant UX, backend keeps things persistent.
+
+📝 Next Steps (Optional Tasks)
+Generate API routes for cart & wishlist sync.
+
+Add Stripe checkout API and webhook handlers.
+
+Create context providers for both cart and wishlist.
+
+Style frontend buttons as seen on Daraz.
+			
+

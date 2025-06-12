@@ -5,6 +5,7 @@ export const getRelatedProducts = async (currentProductId: string, categoryIds: 
     const RELATED_PRODUCTS_QUERY = defineQuery(`
         *[_type == "product" 
         && _id != $currentProductId 
+        && stock > 0
         && count((category[]->_id)[@ in $categoryIds]) > 0] 
         | order(name asc) [0...4]
     `);

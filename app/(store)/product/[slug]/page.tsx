@@ -29,6 +29,11 @@ const ProductPage = async ({
   if (!product) return notFound();
 
   const isOutOfStock = product.stock === 0;
+  const isLowStock = product.stock > 0 && product.stock <= 5;
+  const hasDiscount = product.discount && product.discount > 0;
+  const discountedPrice = hasDiscount && product.price && product.discount
+    ? product.price * (1 - product.discount / 100)
+    : product.price;
 
   // Get related products
   const categoryIds = product.category?.map(cat => cat._ref) || [];
@@ -39,25 +44,14 @@ const ProductPage = async ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Product Image */}
         <div className="relative">
-          <div
-            className={`relative aspect-square overflow-hidden rounded-3xl shadow-2xl bg-gray-50 ${
-              isOutOfStock ? "opacity-50" : ""
-            }`}
-          >
+          <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl bg-gray-50">
             {product.image && (
               <Image
                 src={urlFor(product.image).url()}
                 alt={product.name ?? "Product image"}
                 fill
-                className="object-contain transition-transform duration-500 hover:scale-105"
+                className="object-cover transition-transform duration-500 hover:scale-105"
               />
-            )}
-            {isOutOfStock && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-3xl">
-                <span className="text-white text-xl sm:text-2xl font-semibold bg-black/30 px-4 sm:px-6 py-2 sm:py-3 rounded-full backdrop-blur-sm">
-                  Out of Stock
-                </span>
-              </div>
             )}
           </div>
           <div className="absolute top-4 right-4 z-10">
@@ -69,8 +63,24 @@ const ProductPage = async ({
         <div className="flex flex-col justify-between p-4">
           <div className="space-y-4 sm:space-y-6">
             <h1 className="text-2xl sm:text-4xl font-bold text-gray-800">{product.name}</h1>
-            <div className="text-2xl sm:text-3xl text-emerald-600 font-semibold">
-              ${product.price?.toFixed(2)}
+            <div className="flex items-baseline space-x-3">
+              {hasDiscount ? (
+                <>
+                  <span className="text-3xl sm:text-4xl text-gray-900 font-bold">
+                    ${discountedPrice?.toFixed(2)}
+                  </span>
+                  <span className="text-lg sm:text-xl text-gray-500 line-through">
+                    ${product.price?.toFixed(2)}
+                  </span>
+                  <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap">
+                    -{product.discount}%
+                  </span>
+                </>
+              ) : (
+                <span className="text-3xl sm:text-4xl text-emerald-600 font-bold">
+                  ${product.price?.toFixed(2)}
+                </span>
+              )}
             </div>
             
             {/* Collapsible Description */}
@@ -82,6 +92,19 @@ const ProductPage = async ({
           </div>
 
           <div className="mt-6 sm:mt-8">
+            {isOutOfStock ? (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <span className="text-red-600 font-medium">
+                  Out of Stock
+                </span>
+              </div>
+            ) : isLowStock ? (
+              <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                <span className="text-amber-600 font-medium">
+                  Only {product.stock} left 
+                </span>
+              </div>
+            ) : null}
             <QuantitySelector product={product} isOutOfStock={isOutOfStock} />
           </div>
         </div>

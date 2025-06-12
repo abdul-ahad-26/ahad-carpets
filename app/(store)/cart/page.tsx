@@ -1,4 +1,5 @@
 'use client'
+// Import necessary dependencies
 import { urlFor } from "@/sanity/lib/image"
 import { useCart } from "@/context/CartContext"
 import { SignInButton, useAuth, useUser } from "@clerk/nextjs"
@@ -13,8 +14,9 @@ import QuantitySelector from "@/components/QuantitySelector"
 import { toast } from "sonner"
 
 function CartPage() {
+  // Get cart functions and user authentication state
   const {
-    removeItemCompletely,
+      removeItemCompletely,
     clearCart,
     getTotalPrice,
     getGroupedItems
@@ -23,24 +25,30 @@ function CartPage() {
   const { user } = useUser()
   const router = useRouter()
 
+  // State management for client-side rendering and loading states
   const [isClient, setIsClient] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  // Set client-side rendering flag on mount
   useEffect(() => {
     setIsClient(true)
   }, [])
 
+  // Show loader while client-side rendering is not ready
   if (!isClient) {
     return <Loader />
   }
 
+  // Get grouped cart items
   const groupedItems = getGroupedItems()
 
+  // Handle checkout process
   const handleCheckout = async () => {
     if (!isSignedIn) return;
     setIsLoading(true)
 
     try {
+      // Prepare metadata for checkout session
       const metadata: Metadata = {
         orderNumber: crypto.randomUUID(),
         customerName: user?.fullName ?? "Unknown",
@@ -48,6 +56,7 @@ function CartPage() {
         clerkUserId: user!.id,
       }
 
+      // Create checkout session and handle response
       const checkoutUrl = await createCheckoutSession(groupedItems, metadata);
       if (checkoutUrl && typeof checkoutUrl === 'string') {
         window.location.href = checkoutUrl
@@ -62,11 +71,13 @@ function CartPage() {
     }
   }
 
+  // Handle cart clearing
   const handleClearCart = () => {
     clearCart()
     toast.success("Cart cleared successfully")
   }
 
+  // Render empty cart state
   if (groupedItems.length === 0) {
     return (
       <div className="container mx-auto p-4 flex flex-col items-center justify-center min-h-[60vh] space-y-6">
@@ -88,8 +99,10 @@ function CartPage() {
     )
   }
 
+  // Main cart view with items
   return (
     <div className="container mx-auto p-4 max-w-6xl">
+      {/* Cart header with title and clear cart button */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
@@ -104,13 +117,17 @@ function CartPage() {
           Clear Cart
         </Button>
       </div>
+
+      {/* Cart content layout */}
       <div className="flex flex-col lg:flex-row gap-8">
+        {/* Cart items list */}
         <div className="flex-grow space-y-4">
           {groupedItems.map((item) => (
             <div
               key={item.product._id}
               className="p-6 border rounded-xl shadow-sm hover:shadow-md transition-all duration-300 bg-white group">
               <div className="flex items-center justify-between">
+                {/* Product information and image */}
                 <div
                   className="flex items-center cursor-pointer flex-1 min-w-0 group"
                   onClick={() => router.push(`/product/${item.product.slug?.current}`)}>
@@ -138,6 +155,7 @@ function CartPage() {
                   </div>
                 </div>
 
+                {/* Quantity selector and remove button */}
                 <div className="flex items-center gap-6">
                   <QuantitySelector product={item.product} />
                   <Button
@@ -157,6 +175,7 @@ function CartPage() {
           ))}
         </div>
 
+        {/* Order summary sidebar */}
         <div className="lg:w-96 bg-white p-6 rounded-xl shadow-sm h-fit sticky top-4">
           <h3 className="text-2xl font-semibold text-gray-900 mb-6">Order Summary</h3>
           <div className="space-y-4">
@@ -176,6 +195,7 @@ function CartPage() {
             </div>
           </div>
 
+          {/* Checkout button - conditional rendering based on auth state */}
           {isSignedIn ? (
             <Button
               onClick={handleCheckout}

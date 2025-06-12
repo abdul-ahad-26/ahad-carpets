@@ -3,6 +3,7 @@
     import stripe from "@/lib/stripe";
     import { urlFor } from "@/sanity/lib/image";
     import { CartItem } from "@/context/CartContext"
+    import { backendClient } from "@/sanity/lib/backendClient";
 
     export type Metadata = {
         orderNumber: string;
@@ -24,6 +25,17 @@
                 throw new Error("Some items do not have a price")
             }
 
+            // Validate stock availability for each item
+            for (const item of items) {
+                const product = await backendClient.getDocument(item.product._id);
+                if (!product) {
+                    throw new Error(`Product ${item.product.name} not found`);
+                }
+                if (product.stock < item.quantity) {
+                    throw new Error(`Not enough stock for ${item.product.name}. Available: ${product.stock}, Requested: ${item.quantity}`);
+                }
+            }
+
             //Search for existing customer by email 
             const customers = await stripe.customers.list({
                 email: metadata.customerEmail,
@@ -40,7 +52,7 @@
             `${process.env.NEXT_PUBLIC_BASE_URL}`
 
             const successUrl = `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}`
-            const cancelUrl = `${baseUrl}/basket`
+            const cancelUrl = `${baseUrl}/cart`
 
             const session = await stripe.checkout.sessions.create({
                 customer: customerId,
@@ -77,6 +89,6 @@
             return session.url;
         } catch (error: any) {
             console.error("Checkout error", error.message);
-            return { error: "Unable to create Stripe session. Please try again." };
+            return { error: error.message || "Unable to create Stripe session. Please try again." };
         }
     }

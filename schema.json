@@ -720,6 +720,13 @@
         },
         "optional": true
       },
+      "discount": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
       "category": {
         "type": "objectAttribute",
         "value": {
@@ -768,8 +775,7 @@
         "type": "objectAttribute",
         "value": {
           "type": "number"
-        },
-        "optional": true
+        }
       }
     }
   },

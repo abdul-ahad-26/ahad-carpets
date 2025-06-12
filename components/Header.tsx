@@ -4,7 +4,7 @@ import Link from "next/link";
 import Form from "next/form"
 import { PackageIcon, MenuIcon } from "@sanity/icons";
 import { useState, useEffect } from "react";
-import { FiShoppingCart, FiHeart, FiSearch } from 'react-icons/fi'
+import { FiShoppingCart, FiHeart, FiSearch, FiHome, FiX } from 'react-icons/fi'
 import { Button } from "./ui/button";
 import { useCart } from "@/context/CartContext"
 import { useWishlist } from "@/context/WishlistContext"
@@ -18,7 +18,8 @@ function Header() {
     const { items: wishlistItems } = useWishlist()
 
     // Calculate total items in cart
-    const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+    const itemCount = cartItems.length
+    
 
     // Handle scroll effect
     useEffect(() => {
@@ -28,6 +29,18 @@ function Header() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Prevent body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMenuOpen]);
 
     return (
         <motion.header 
@@ -39,6 +52,14 @@ function Header() {
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 md:h-20">
+                    {/* Mobile Menu Button */}
+                    <Button 
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-all duration-300"
+                    >
+                        <MenuIcon className="h-6 w-6" />
+                    </Button>
+
                     {/* Logo */}
                     <Link
                         href="/"
@@ -62,16 +83,16 @@ function Header() {
                         </Form>
                     </div>
 
-                    {/* Mobile Menu Button */}
-                    <Button 
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-all duration-300"
-                    >
-                        <MenuIcon className="h-6 w-6" />
-                    </Button>
-
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center space-x-3">
+                        <Link
+                            href="/"
+                            className="flex items-center px-4 py-2 bg-white text-gray-700 rounded-full border border-gray-200 hover:bg-gray-50 hover:border-[#1a3fa6] hover:text-[#1a3fa6] transition-all duration-300 text-sm font-medium"
+                        >
+                            <FiHome className="w-4 h-4 mr-2" />
+                            <span>Home</span>
+                        </Link>
+
                         <Link
                             href="/about"
                             className="flex items-center px-4 py-2 bg-white text-gray-700 rounded-full border border-gray-200 hover:bg-gray-50 hover:border-[#1a3fa6] hover:text-[#1a3fa6] transition-all duration-300 text-sm font-medium"
@@ -89,7 +110,7 @@ function Header() {
                                 <motion.span 
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="absolute -top-2 -right-2 bg-[#e11d48] text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold border-2 border-white"
+                                    className="absolute -top-1 -right-1 bg-[#e11d48] text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-white px-1"
                                 >
                                     {wishlistItems.length}
                                 </motion.span>
@@ -106,7 +127,7 @@ function Header() {
                                 <motion.span 
                                     initial={{ scale: 0 }}
                                     animate={{ scale: 1 }}
-                                    className="absolute -top-2 -right-2 bg-[#e11d48] text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold border-2 border-white"
+                                    className="absolute -top-1 -right-1 bg-[#e11d48] text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-white px-1"
                                 >
                                     {itemCount}
                                 </motion.span>
@@ -143,33 +164,58 @@ function Header() {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* Mobile Menu - Full Screen Sidebar */}
                 <AnimatePresence>
                     {isMenuOpen && (
                         <motion.div 
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="md:hidden overflow-hidden"
+                            initial={{ x: '-100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '-100%' }}
+                            transition={{ type: "spring", damping: 20 }}
+                            className="fixed inset-0 bg-white z-50 md:hidden"
                         >
-                            <div className="py-4 space-y-4">
-                                <Form action="/search" className="w-full mb-4">
-                                    <div className="relative">
-                                        <input 
-                                            type="text" 
-                                            name="query"
-                                            placeholder="Search for products..."
-                                            className="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:ring-2 focus:ring-[#1a3fa6] focus:border-transparent bg-gray-50"
-                                        />
-                                        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                                    </div>
-                                </Form>
-                                
-                                <div className="flex flex-col space-y-3">
+                            <div className="h-full flex flex-col">
+                                {/* Header with close button */}
+                                <div className="flex justify-between items-center p-4 border-b">
+                                    <h2 className="text-xl font-bold text-[#1a3fa6]">Menu</h2>
+                                    <Button 
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="p-2 rounded-full hover:bg-gray-100"
+                                    >
+                                        <FiX className="h-6 w-6" />
+                                    </Button>
+                                </div>
+
+                                {/* Search Bar */}
+                                <div className="p-4 border-b">
+                                    <Form action="/search" className="w-full">
+                                        <div className="relative">
+                                            <input 
+                                                type="text" 
+                                                name="query"
+                                                placeholder="Search for products..."
+                                                className="w-full pl-10 pr-4 py-3 rounded-full border border-gray-300 focus:ring-2 focus:ring-[#1a3fa6] focus:border-transparent bg-gray-50"
+                                            />
+                                            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                                        </div>
+                                    </Form>
+                                </div>
+
+                                {/* Navigation Links */}
+                                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                                    <Link
+                                        href="/"
+                                        className="flex items-center px-4 py-3 bg-gray-50 text-gray-700 rounded-full hover:bg-gray-100 transition-all duration-300"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <FiHome className="w-5 h-5 mr-3" />
+                                        <span className="font-medium">Home</span>
+                                    </Link>
+
                                     <Link
                                         href="/about"
                                         className="flex items-center px-4 py-3 bg-gray-50 text-gray-700 rounded-full hover:bg-gray-100 transition-all duration-300"
+                                        onClick={() => setIsMenuOpen(false)}
                                     >
                                         <span className="font-medium">About</span>
                                     </Link>
@@ -177,11 +223,12 @@ function Header() {
                                     <Link
                                         href="/wishlist"
                                         className="relative flex items-center px-4 py-3 bg-gray-50 text-gray-700 rounded-full hover:bg-gray-100 transition-all duration-300"
+                                        onClick={() => setIsMenuOpen(false)}
                                     >
                                         <FiHeart className="w-5 h-5 mr-3 text-[#b91c1c]" />
                                         <span className="font-medium">Wishlist</span>
                                         {wishlistItems.length > 0 && (
-                                            <span className="absolute -top-2 -right-2 bg-[#e11d48] text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold border-2 border-white">
+                                            <span className="absolute top-3 right-4 bg-[#e11d48] text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-white px-1">
                                                 {wishlistItems.length}
                                             </span>
                                         )}
@@ -190,11 +237,12 @@ function Header() {
                                     <Link
                                         href="/cart"
                                         className="relative flex items-center px-4 py-3 bg-[#1a3fa6] text-white rounded-full hover:bg-[#2563eb] transition-all duration-300"
+                                        onClick={() => setIsMenuOpen(false)}
                                     >
                                         <FiShoppingCart className="w-5 h-5 mr-3" />
                                         <span className="font-medium">Cart</span>
                                         {itemCount > 0 && (
-                                            <span className="absolute -top-2 -right-2 bg-[#e11d48] text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold border-2 border-white">
+                                            <span className="absolute top-3 right-4 bg-[#e11d48] text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold border-2 border-white px-1">
                                                 {itemCount}
                                             </span>
                                         )}
@@ -205,6 +253,7 @@ function Header() {
                                             <Link
                                                 href="/orders"
                                                 className="flex items-center px-4 py-3 bg-gray-50 text-gray-700 rounded-full hover:bg-gray-100 transition-all duration-300"
+                                                onClick={() => setIsMenuOpen(false)}
                                             >
                                                 <PackageIcon className="w-5 h-5 mr-3" />
                                                 <span className="font-medium">Orders</span>
@@ -221,7 +270,10 @@ function Header() {
                                             </div>
                                         ) : (
                                             <SignInButton mode="modal">
-                                                <Button className="w-full px-4 py-3 bg-[#1a3fa6] text-white rounded-full hover:bg-[#2563eb] transition-all duration-300">
+                                                <Button 
+                                                    className="w-full px-4 py-3 bg-[#1a3fa6] text-white rounded-full hover:bg-[#2563eb] transition-all duration-300"
+                                                    onClick={() => setIsMenuOpen(false)}
+                                                >
                                                     Sign In
                                                 </Button>
                                             </SignInButton>

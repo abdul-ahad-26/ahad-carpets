@@ -6,14 +6,17 @@ import WishlistButton from './WishlistButton';
 
 const ProductThumb = ({ product }: { product: Product }) => {
   const isOutOfStock = product.stock === 0;
-    const productUrl = `/product/${product.slug?.current}`;
+  const productUrl = `/product/${product.slug?.current}`;
   const productImageUrl = product.image ? urlFor(product.image).url() : '';
+  const hasDiscount = product.discount && product.discount > 0;
+  const discountedPrice = hasDiscount && product.price && product.discount
+    ? product.price * (1 - product.discount / 100)
+    : product.price;
 
   return (
     <div
-      className={`group flex flex-col bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden ${
-        isOutOfStock ? 'opacity-60 pointer-events-none' : ''
-      }`}
+      className="group flex flex-col bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden 
+      "
     >
       {/* Image Section */}
       <Link href={productUrl} aria-label={`View ${product.name}`}>
@@ -24,7 +27,7 @@ const ProductThumb = ({ product }: { product: Product }) => {
               alt={product.name || 'Product image'}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-contain group-hover:scale-105 transition-transform duration-300"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
               priority
             />
           )}
@@ -44,7 +47,7 @@ const ProductThumb = ({ product }: { product: Product }) => {
         {/* Title & Description */}
         <div>
           <Link href={productUrl}>
-            <h2 className="text-lg font-semibold text-gray-800 truncate hover:underline">
+            <h2 className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-200 line-clamp-1">
               {product.name}
             </h2>
           </Link>
@@ -57,21 +60,30 @@ const ProductThumb = ({ product }: { product: Product }) => {
           </p>
         </div>
 
-        {/* Price, Wishlist & Button */}
+        {/* Price & Wishlist */}
         <div className="mt-4">
           <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-gray-900">
-              ${product.price?.toFixed(2)}
-            </span>
+            <div className="flex items-baseline space-x-2">
+              {hasDiscount ? (
+                <>
+                  <span className="text-xl font-bold text-gray-900">
+                    ${discountedPrice?.toFixed(2)}
+                  </span>
+                  <span className="text-sm text-gray-500 line-through">
+                    ${product.price?.toFixed(2)}
+                  </span>
+                  <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+                    -{product.discount}%
+                  </span>
+                </>
+              ) : (
+                <span className="text-xl font-bold text-gray-900">
+                  ${product.price?.toFixed(2)}
+                </span>
+              )}
+            </div>
             <WishlistButton product={product} size="lg" />
           </div>
-
-          <Link
-            href={productUrl}
-            className="mt-3 block w-full text-center py-2 px-4 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
-          >
-            View Details
-          </Link>
         </div>
       </div>
     </div>

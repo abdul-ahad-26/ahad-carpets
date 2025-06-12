@@ -3,7 +3,6 @@ import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
-
 const ProductCard = ({ product }: { product: Product }) => {
   const isOutOfStock = product.stock === 0;
   const productUrl = `/product/${product.slug?.current}`;
@@ -15,8 +14,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <div
-      className="group flex flex-col bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden 
-      "
+      className="group flex flex-col bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
     >
       {/* Image Section */}
       <Link href={productUrl} aria-label={`View ${product.name}`}>
@@ -60,29 +58,26 @@ const ProductCard = ({ product }: { product: Product }) => {
           </p>
         </div>
 
-        {/* Price & Wishlist */}
+        {/* Price Section */}
         <div className="mt-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline space-x-2">
-              {hasDiscount ? (
-                <>
-                  <span className="text-xl font-bold text-gray-900">
-                    ${discountedPrice?.toFixed(2)}
-                  </span>
-                  <span className="text-sm text-gray-500 line-through">
-                    ${product.price?.toFixed(2)}
-                  </span>
-                  <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
-                    -{product.discount}%
-                  </span>
-                </>
-              ) : (
+          <div className="flex items-baseline space-x-2">
+            {hasDiscount ? (
+              <>
                 <span className="text-xl font-bold text-gray-900">
+                  ${discountedPrice?.toFixed(2)}
+                </span>
+                <span className="text-sm text-gray-500 line-through">
                   ${product.price?.toFixed(2)}
                 </span>
-              )}
-            </div>
-            
+                <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+                  -{product.discount}%
+                </span>
+              </>
+            ) : (
+              <span className="text-xl font-bold text-gray-900">
+                ${product.price?.toFixed(2)}
+              </span>
+            )}
           </div>
         </div>
       </div>

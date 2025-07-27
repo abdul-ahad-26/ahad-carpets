@@ -69,17 +69,19 @@ export const productType = defineType({
         }),
     ],
     preview: {
-        select:{
-            title: "name",
-            media : "image",
-            subtitle: "price",
+        select: {
+          title: "name",
+          subtitle: "price",
+          media: "images.0.asset", // <-- Correct path to image
         },
-        prepare(select) {
-            return{
-                title: select.title,
-                subtitle: `$${select.subtitle}`,
-                media: select.media,
-            };
+        prepare({ title, subtitle, media }) {
+          return {
+            title,
+            subtitle: subtitle ? `$${subtitle}` : "No price",
+            media,
+          };
         },
-    },
+      },
+      
+      
 });

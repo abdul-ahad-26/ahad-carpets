@@ -132,9 +132,9 @@ function CartPage() {
                   className="flex items-center cursor-pointer w-full sm:w-auto group"
                   onClick={() => router.push(`/product/${item.product.slug?.current}`)}>
                   <div className="w-20 h-20 flex-shrink-0 mr-4 relative overflow-hidden rounded-lg">
-                    {item.product.image && (
+                    {item.product.images && (
                       <Image
-                        src={urlFor(item.product.image).url()}
+                        src={urlFor(item.product.images[0]).url()}
                         alt={item.product.name ?? "Product image"}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         width={96}
@@ -143,7 +143,7 @@ function CartPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-base sm:text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
+                    <h2 className="text-base sm:text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate text-wrap">
                       {item.product.name}
                     </h2>
                     <p className="text-sm sm:text-lg text-gray-700 mt-1">

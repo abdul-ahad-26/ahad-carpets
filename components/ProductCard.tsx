@@ -6,7 +6,7 @@ import Link from 'next/link';
 const ProductCard = ({ product }: { product: Product }) => {
   const isOutOfStock = product.stock === 0;
   const productUrl = `/product/${product.slug?.current}`;
-  const productImageUrl = product.image ? urlFor(product.image).url() : '';
+  const productImageUrl = product.images ? urlFor(product.images[0]).url() : '';
   const hasDiscount = product.discount && product.discount > 0;
   const discountedPrice = hasDiscount && product.price && product.discount
     ? product.price * (1 - product.discount / 100)
@@ -19,7 +19,7 @@ const ProductCard = ({ product }: { product: Product }) => {
       {/* Image Section */}
       <Link href={productUrl} aria-label={`View ${product.name}`}>
         <div className="relative aspect-square w-full overflow-hidden bg-gray-100 rounded-t-2xl">
-          {product.image && (
+          {product.images && (
             <Image
               src={productImageUrl}
               alt={product.name || 'Product image'}

@@ -1,14 +1,12 @@
-// ProductPage.tsx
 import getProductBySlug from "@/sanity/lib/products/getProductBySlug";
 import { getRelatedProducts } from "@/sanity/lib/products/getRelatedProducts";
 import { notFound } from "next/navigation";
-import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
 import ProductDescription from "@/components/ProductDescription";
 import WishlistButton from "@/components/WishlistButton";
 import RelatedProducts from "@/components/RelatedProducts";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import QuantitySelector from "@/components/QuantitySelector";
+import ProductImageGallery from "@/components/ProductImageGallery";
 
 
 export const dynamic = "force-static"
@@ -29,7 +27,7 @@ const ProductPage = async ({
   if (!product) return notFound();
 
   const isOutOfStock = product.stock === 0;
-  const isLowStock = product.stock > 0 && product.stock <= 5;
+  const isLowStock = product.stock! > 0 && product.stock! <= 5;
   const hasDiscount = product.discount && product.discount > 0;
   const discountedPrice = hasDiscount && product.price && product.discount
     ? product.price * (1 - product.discount / 100)
@@ -39,13 +37,14 @@ const ProductPage = async ({
   const categoryIds = product.category?.map(cat => cat._ref) || [];
   const relatedProducts = await getRelatedProducts(product._id, categoryIds);
 
+
   return (
     <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 bg-white rounded-3xl shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
         {/* Product Image */}
-        <div className="relative">
+        {/* <div className="relative">
           <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl bg-gray-50">
-            {product.image && (
+            {product.images && (
               <Image
                 src={urlFor(product.image).url()}
                 alt={product.name ?? "Product image"}
@@ -57,7 +56,13 @@ const ProductPage = async ({
           <div className="absolute top-4 right-4 z-10">
             <WishlistButton product={product} size="lg" />
           </div>
-        </div>
+        </div> */}
+    <div className="relative">
+      {product.images && <ProductImageGallery images={product.images} />}
+      <div className="absolute top-4 right-4 z-10">
+        <WishlistButton product={product} size="lg" />
+      </div>
+    </div>
 
         {/* Product Info */}
         <div className="flex flex-col justify-between p-4">

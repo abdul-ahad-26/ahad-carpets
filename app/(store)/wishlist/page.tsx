@@ -77,9 +77,9 @@ export default function WishlistPage() {
             >
               <Link href={`/product/${product.slug?.current}`} className="flex-shrink-0">
                 <div className="relative h-32 w-32 overflow-hidden rounded-lg border border-gray-200">
-                  {product.image && (
+                  {product.images && (
                     <Image
-                      src={urlFor(product.image).url()}
+                      src={urlFor(product.images[0]).url()}
                       alt={product.name ?? 'Product image'}
                       fill
                       className="object-cover hover:scale-105 transition-transform duration-200"

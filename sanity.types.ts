@@ -74,7 +74,7 @@ export type Product = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
+  images?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -85,7 +85,8 @@ export type Product = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -126,7 +127,7 @@ export type Product = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock: number;
+  stock?: number;
 };
 
 export type Category = {
@@ -318,7 +319,7 @@ export type MY_ORDERS_QUERYResult = Array<{
       _rev: string;
       name?: string;
       slug?: Slug;
-      image?: {
+      images?: Array<{
         asset?: {
           _ref: string;
           _type: "reference";
@@ -329,7 +330,8 @@ export type MY_ORDERS_QUERYResult = Array<{
         hotspot?: SanityImageHotspot;
         crop?: SanityImageCrop;
         _type: "image";
-      };
+        _key: string;
+      }>;
       description?: Array<{
         children?: Array<{
           marks?: Array<string>;
@@ -370,7 +372,7 @@ export type MY_ORDERS_QUERYResult = Array<{
         _key: string;
         [internalGroqTypeReferenceTo]?: "category";
       }>;
-      stock: number;
+      stock?: number;
     } | null;
     quantity?: number;
     _key: string;
@@ -414,7 +416,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
+  images?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -425,7 +427,8 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -466,7 +469,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock: number;
+  stock?: number;
 }>;
 
 // Source: ./sanity/lib/products/getProductBySlug.ts
@@ -480,7 +483,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
+  images?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -491,7 +494,8 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -532,7 +536,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock: number;
+  stock?: number;
 } | null;
 
 // Source: ./sanity/lib/products/getProductsByCategory.ts
@@ -546,7 +550,7 @@ export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
+  images?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -557,7 +561,8 @@ export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -598,7 +603,7 @@ export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock: number;
+  stock?: number;
 }>;
 
 // Source: ./sanity/lib/products/getProductsByName.ts
@@ -612,7 +617,7 @@ export type PRODUCT_SEARCH_QUERYResult = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
+  images?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -623,7 +628,8 @@ export type PRODUCT_SEARCH_QUERYResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -664,7 +670,7 @@ export type PRODUCT_SEARCH_QUERYResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock: number;
+  stock?: number;
 }>;
 
 // Source: ./sanity/lib/products/getRelatedProducts.ts
@@ -678,7 +684,7 @@ export type RELATED_PRODUCTS_QUERYResult = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
+  images?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -689,7 +695,8 @@ export type RELATED_PRODUCTS_QUERYResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -730,7 +737,7 @@ export type RELATED_PRODUCTS_QUERYResult = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock: number;
+  stock?: number;
 }>;
 
 // Source: ./sanity/lib/sales/getActiveSaleByCoupon.ts

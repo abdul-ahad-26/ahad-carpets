@@ -79,7 +79,7 @@
                             metadata: {
                                 id: item.product._id,
                             },
-                            images: item.product.image ? [urlFor(item.product.image).url()] : undefined,
+                            images: item.product.images ? [urlFor(item.product.images[0]).url()] : undefined,
                         },
                     },
                     quantity: item.quantity

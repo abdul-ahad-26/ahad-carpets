@@ -3,13 +3,14 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { Product } from '@/sanity.types'
 
-type Props = {
-  images: any[] // Or SanityImage[]
+interface ProductImageGalleryProp  {
+  product: Product
 }
 
-const ProductImageGallery = ({ images }: Props) => {
-  const [selectedImage, setSelectedImage] = useState(images?.[0])
+const ProductImageGallery = ({ product }: ProductImageGalleryProp) => {
+  const [selectedImage, setSelectedImage] = useState(product.images?.[0])
 
   return (
     <>
@@ -27,7 +28,7 @@ const ProductImageGallery = ({ images }: Props) => {
 
       {/* Thumbnails */}
       <div className="flex mt-4 space-x-2 overflow-x-auto">
-        {images.map((img, i) => (
+        {product.images?.map((img, i) => (
           <button
             key={i}
             onClick={() => setSelectedImage(img)}

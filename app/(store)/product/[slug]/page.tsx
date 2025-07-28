@@ -58,7 +58,7 @@ const ProductPage = async ({
           </div>
         </div> */}
     <div className="relative">
-      {product.images && <ProductImageGallery images={product.images} />}
+      {product.images && <ProductImageGallery product={product} />}
       <div className="absolute top-4 right-4 z-10">
         <WishlistButton product={product} size="lg" />
       </div>

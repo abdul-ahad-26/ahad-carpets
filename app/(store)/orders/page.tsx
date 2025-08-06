@@ -138,7 +138,7 @@
                                                                 {product.product?.images && (
                                                                     <div className='relative h-16 w-16 flex-shrink-0 rounded-md overflow-hidden'>
                                                                         <Image
-                                                                            src={urlFor(product.product.images).url()}
+                                                                            src={urlFor(product.product.images[0]).url()}
                                                                             alt={product.product?.name ?? ""}
                                                                             className="object-cover"
                                                                             fill

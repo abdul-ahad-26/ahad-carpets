@@ -24,19 +24,26 @@ export const productType = defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            
+
             name: "images",
             title: "Product Image",
             type: "array",
-            of:[
+            of: [
                 {
                     type: "image",
-                    options:{
-                        hotspot:true,
+                    options: {
+                        hotspot: true,
                     },
                 },
             ],
         }),
+        defineField({
+            name: "videoUrl",
+            title: "Product Video (YouTube/Vimeo)",
+            type: "url",
+            description: "Paste YouTube or Vimeo link (use unlisted link for private videos)"
+        }),
+
         defineField({
             name: "description",
             title: "Description",
@@ -69,18 +76,18 @@ export const productType = defineType({
     ],
     preview: {
         select: {
-          title: "name",
-          subtitle: "price",
-          media: "images.0.asset", // <-- Correct path to image
+            title: "name",
+            subtitle: "price",
+            media: "images.0.asset", // <-- Correct path to image
         },
         prepare({ title, subtitle, media }) {
-          return {
-            title,
-            subtitle: subtitle ? `$${subtitle}` : "No price",
-            media,
-          };
+            return {
+                title,
+                subtitle: subtitle ? `$${subtitle}` : "No price",
+                media,
+            };
         },
-      },
-      
-      
+    },
+
+
 });

@@ -87,6 +87,7 @@ export type Product = {
     _type: "image";
     _key: string;
   }>;
+  videoUrl?: string;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -332,6 +333,7 @@ export type MY_ORDERS_QUERYResult = Array<{
         _type: "image";
         _key: string;
       }>;
+      videoUrl?: string;
       description?: Array<{
         children?: Array<{
           marks?: Array<string>;
@@ -429,6 +431,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     _type: "image";
     _key: string;
   }>;
+  videoUrl?: string;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -496,6 +499,7 @@ export type PRODUCT_BY_SLUG_QUERYResult = {
     _type: "image";
     _key: string;
   }>;
+  videoUrl?: string;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -563,6 +567,7 @@ export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
     _type: "image";
     _key: string;
   }>;
+  videoUrl?: string;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -630,6 +635,7 @@ export type PRODUCT_SEARCH_QUERYResult = Array<{
     _type: "image";
     _key: string;
   }>;
+  videoUrl?: string;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -697,6 +703,7 @@ export type RELATED_PRODUCTS_QUERYResult = Array<{
     _type: "image";
     _key: string;
   }>;
+  videoUrl?: string;
   description?: Array<{
     children?: Array<{
       marks?: Array<string>;

@@ -20,9 +20,9 @@ const ProductPage = async ({
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   
-  console.log(
-    crypto.randomUUID().slice(0,5) +  `>>> Rerendered the product page cache for ${slug} `
-  );
+  // console.log(
+  //   crypto.randomUUID().slice(0,5) +  `>>> Rerendered the product page cache for ${slug} `
+  // );
 
   if (!product) return notFound();
 
@@ -41,22 +41,6 @@ const ProductPage = async ({
   return (
     <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 bg-white rounded-3xl shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-        {/* Product Image */}
-        {/* <div className="relative">
-          <div className="relative aspect-square overflow-hidden rounded-3xl shadow-2xl bg-gray-50">
-            {product.images && (
-              <Image
-                src={urlFor(product.image).url()}
-                alt={product.name ?? "Product image"}
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
-            )}
-          </div>
-          <div className="absolute top-4 right-4 z-10">
-            <WishlistButton product={product} size="lg" />
-          </div>
-        </div> */}
     <div className="relative">
       {product.images && <ProductImageGallery product={product} />}
       <div className="absolute top-4 right-4 z-10">
